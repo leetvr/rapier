@@ -2,8 +2,8 @@
 
 use crate::data::{ComponentSet, ComponentSetMut, ComponentSetOption};
 use crate::dynamics::{
-    RigidBodyActivation, RigidBodyChanges, RigidBodyColliders, RigidBodyDominance, RigidBodyHandle,
-    RigidBodyIds, RigidBodyPosition, RigidBodyType, RigidBodyVelocity,
+    MultibodySet, RigidBodyActivation, RigidBodyChanges, RigidBodyColliders, RigidBodyDominance,
+    RigidBodyHandle, RigidBodyIds, RigidBodyPosition, RigidBodyType, RigidBodyVelocity,
 };
 use crate::geometry::{
     BroadPhase, BroadPhasePairEvent, ColliderBroadPhaseData, ColliderChanges, ColliderFlags,
@@ -49,6 +49,7 @@ impl CollisionPipeline {
         narrow_phase: &mut NarrowPhase,
         bodies: &mut Bodies,
         colliders: &mut Colliders,
+        multibodies: &MultibodySet,
         modified_colliders: &[ColliderHandle],
         removed_colliders: &[ColliderHandle],
         hooks: &dyn PhysicsHooks<Bodies, Colliders>,
@@ -97,6 +98,7 @@ impl CollisionPipeline {
             prediction_distance,
             bodies,
             colliders,
+            multibodies,
             modified_colliders,
             hooks,
             events,
@@ -122,6 +124,7 @@ impl CollisionPipeline {
         broad_phase: &mut BroadPhase,
         narrow_phase: &mut NarrowPhase,
         bodies: &mut RigidBodySet,
+        multibodies: &MultibodySet,
         colliders: &mut ColliderSet,
         hooks: &dyn PhysicsHooks<RigidBodySet, ColliderSet>,
         events: &dyn EventHandler,
@@ -135,6 +138,7 @@ impl CollisionPipeline {
             broad_phase,
             narrow_phase,
             bodies,
+            multibodies,
             colliders,
             &mut modified_bodies,
             &mut modified_colliders,
@@ -151,6 +155,7 @@ impl CollisionPipeline {
         broad_phase: &mut BroadPhase,
         narrow_phase: &mut NarrowPhase,
         bodies: &mut Bodies,
+        multibodies: &MultibodySet,
         colliders: &mut Colliders,
         modified_bodies: &mut Vec<RigidBodyHandle>,
         modified_colliders: &mut Vec<ColliderHandle>,
@@ -193,6 +198,7 @@ impl CollisionPipeline {
             narrow_phase,
             bodies,
             colliders,
+            multibodies,
             &modified_colliders[..],
             removed_colliders,
             hooks,
